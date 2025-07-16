@@ -164,10 +164,10 @@ class TikTokBusinessModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun initializeSdk(appId: String, ttAppId: String, debug: Boolean?) {
+  fun initializeSdk(appId: String, ttAppId: String, accessToken: String, debug: Boolean?) {
     val configBuilder =
-      TikTokBusinessSdk.TTConfig(reactApplicationContext).setAppId(appId).setTTAppId(ttAppId)
-
+      TikTokBusinessSdk.TTConfig(reactApplicationContext,accessToken).setAppId(appId).setTTAppId(ttAppId)
+      
     if (debug == true) {
       configBuilder.openDebugMode().setLogLevel(TikTokBusinessSdk.LogLevel.DEBUG)
     }

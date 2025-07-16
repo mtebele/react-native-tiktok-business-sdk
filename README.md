@@ -41,6 +41,7 @@ async function initializeTikTokSDK() {
     await TikTokBusiness.initializeSdk(
       'YOUR_APP_ID',
       'YOUR_TIKTOK_APP_ID',
+      'YOUR_SECRET_TOKEN',
       true
     );
     // SDK is now initialized, and tracking is active.

@@ -21,6 +21,7 @@ RCT_EXTERN_METHOD(trackCustomEvent:(NSString *)eventName
 
 RCT_EXTERN_METHOD(initializeSdk:(NSString *)appId
                   ttAppId:(NSString *)ttAppId
+                  accessToken:(NSString *)accessToken
                   debug:(nonnull NSNumber *)debug)
 
 + (BOOL)requiresMainQueueSetup

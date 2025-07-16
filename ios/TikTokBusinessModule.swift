@@ -147,8 +147,8 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
   
   /// Initializes the TikTok SDK.
   /// Accepts appId, ttAppId, and an optional debug flag.
-  @objc func initializeSdk(_ appId: String, ttAppId: String, debug: NSNumber) {
-    let config = TikTokConfig.init(appId: appId, tiktokAppId: ttAppId)
+  @objc func initializeSdk(_ appId: String, ttAppId: String, accessToken: String, debug: NSNumber) {
+    let config = TikTokConfig(accessToken: accessToken, appId: appId, tiktokAppId: ttAppId)
     let debugValue = debug.boolValue
     if debugValue {
       config?.enableDebugMode()
