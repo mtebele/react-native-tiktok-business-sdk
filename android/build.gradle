@@ -85,7 +85,7 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.github.tiktok:tiktok-business-android-sdk:1.5.0'
+  implementation 'com.github.tiktok:tiktok-business-android-sdk:1.6.0'
   implementation 'androidx.lifecycle:lifecycle-process:2.8.7'
   implementation 'androidx.lifecycle:lifecycle-common-java8:2.8.7'
   implementation 'com.android.billingclient:billing:7.1.1'
