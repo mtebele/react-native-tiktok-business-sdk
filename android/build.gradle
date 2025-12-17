@@ -7,7 +7,6 @@ buildscript {
     mavenCentral()
     google()
     maven { url 'https://jitpack.io' } // https://business-api.tiktok.com/portal/docs?id=1739585434183746
-    jcenter()
   }
 
   dependencies {
