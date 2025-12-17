@@ -37,7 +37,9 @@ This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaS
 #### JavaScript Bridge (src/index.tsx)
 - Exports main `TikTokBusiness` object with methods: `initializeSdk`, `identify`, `logout`, `trackEvent`, `trackContentEvent`, `trackCustomEvent`
 - All methods return promises for proper async/await handling
-- **initializeSdk**: Requires appId, ttAppId, accessToken (mandatory in v1.4.1), and optional debug flag
+- **initializeSdk**: Requires appId, ttAppId (string or array), accessToken (mandatory in v1.4.1), and optional debug flag
+  - **ttAppId** supports: single App ID string, array of App IDs (converted to comma-separated string), or comma-separated string
+  - Includes validation utility function that enforces strict formatting rules
 - **identify**: Takes 4 parameters: externalId, externalUserName, phoneNumber, email (uses `identifyWithExternalID` internally)
 - Defines enums for event names and parameters:
   - `TikTokEventName`: Standard events (REGISTRATION, LOGIN, etc.)
@@ -120,9 +122,21 @@ This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaS
 
 ### API Signatures
 - All native methods are async and return promises with proper error handling
-- `initializeSdk(appId, ttAppId, accessToken, debug?)` - accessToken is required
+- `initializeSdk(appId, ttAppId: string | string[], accessToken, debug?)` - ttAppId accepts array or string, accessToken is required
 - `identify(externalId, externalUserName, phoneNumber, email)` - all 4 parameters required
 - Error handling tests may show expected errors in console - this is normal behavior
+
+### TikTok App ID Validation
+- **Multiple App IDs Support** (SDK v1.3.1+): Pass array `['11', '22', '33']` or comma-separated string `'11,22,33'`
+- **Validation rules enforced**:
+  - Only numeric characters and commas allowed
+  - No spaces (common mistake - error code: `INVALID_TTAPPID_SPACES`)
+  - No full-width commas (common in Asian locales - error code: `INVALID_TTAPPID_FULLWIDTH_COMMA`)
+  - No trailing or leading commas (error code: `INVALID_TTAPPID_TRAILING_COMMA`)
+  - No consecutive commas (error code: `INVALID_TTAPPID_CONSECUTIVE_COMMAS`)
+  - Cannot be empty (error code: `INVALID_TTAPPID_EMPTY`)
+- **Array format recommended**: Better type safety and automatic conversion to comma-separated string
+- **Validation function**: `validateAndNormalizeTikTokAppId()` in src/index.tsx handles all validation before native call
 
 ### Bridge Configuration Critical Notes
 - **iOS Bridge Synchronization**: The `ios/TikTokBusinessModule.mm` file must exactly match the Swift implementation

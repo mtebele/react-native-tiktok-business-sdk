@@ -61,7 +61,7 @@ import { TikTokBusiness } from 'react-native-tiktok-business-sdk';
 
 Before using any event tracking methods, you must initialize the SDK. You can call `initializeSdk` with your appId, tiktokAppId, accessToken, and optionally set debug mode.
 
-> **⚠️ Breaking Change in v1.4.1**: The `accessToken` parameter is now **required** (was optional in previous versions).
+#### Single TikTok App ID
 
 ```js
 async function initializeTikTokSDK() {
@@ -82,6 +82,44 @@ async function initializeTikTokSDK() {
 
 initializeTikTokSDK();
 ```
+
+#### Multiple TikTok App IDs (Recommended)
+
+Starting from SDK v1.3.1, you can track events with multiple TikTok App IDs by passing an array:
+
+```js
+async function initializeTikTokSDKWithMultipleAppIds() {
+  try {
+    await TikTokBusiness.initializeSdk(
+      'YOUR_APP_ID',
+      ['TIKTOK_APP_ID_1', 'TIKTOK_APP_ID_2', 'TIKTOK_APP_ID_3'],  // Array of TikTok App IDs
+      'YOUR_ACCESS_TOKEN',
+      true
+    );
+    console.log('TikTok SDK initialized with multiple App IDs!');
+  } catch (error) {
+    console.error('Error initializing TikTok SDK:', error);
+  }
+}
+```
+
+Alternatively, you can still use comma-separated string format:
+
+```js
+await TikTokBusiness.initializeSdk(
+  'YOUR_APP_ID',
+  '11,22,33',  // Comma-separated App IDs (no spaces)
+  'YOUR_ACCESS_TOKEN',
+  true
+);
+```
+
+**Important Validation Rules:**
+- App IDs must be numeric strings
+- No spaces allowed in comma-separated format
+- No trailing or leading commas
+- Array format is recommended for better readability and type safety
+- All TikTok App IDs must match your App ID (SDK requirement)
 
 ### Identify a User
 
@@ -252,7 +290,7 @@ All methods return promises and support async/await pattern:
 
 ```typescript
 // Initialize SDK (required before any other calls)
-initializeSdk(appId: string, ttAppId: string, accessToken: string, debug?: boolean): Promise<string>
+initializeSdk(appId: string, ttAppId: string | string[], accessToken: string, debug?: boolean): Promise<string>
 
 // User management
 identify(externalId: string, externalUserName: string, phoneNumber: string, email: string): Promise<string>
