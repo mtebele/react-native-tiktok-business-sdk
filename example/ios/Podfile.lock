@@ -1526,7 +1526,7 @@ PODS:
     - React-perflogger (= 0.78.0)
     - React-utils (= 0.78.0)
   - SocketRocket (0.7.1)
-  - TikTokBusiness (1.5.0):
+  - TikTokBusiness (1.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1546,9 +1546,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - TikTokBusinessSDK (= 1.5.0)
+    - TikTokBusinessSDK (= 1.6.0)
     - Yoga
-  - TikTokBusinessSDK (1.5.0)
+  - TikTokBusinessSDK (1.6.0)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1832,8 +1832,8 @@ SPEC CHECKSUMS:
   ReactCodegen: 008c319179d681a6a00966edfc67fda68f9fbb2e
   ReactCommon: 0c097b53f03d6bf166edbcd0915da32f3015dd90
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  TikTokBusiness: 52208ebac16bc9c2cb06bfdcf94c38e68328cf8c
-  TikTokBusinessSDK: c6419c085404b8a7cc0988184052e71d716477b2
+  TikTokBusiness: c7e318dc83b2f4e36e9e543fafe72141412856d8
+  TikTokBusinessSDK: 6fe49b5b06a24cfe6bf42da789e2f3c6ba39c0e3
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
 PODFILE CHECKSUM: 7a7c0c6f752fa948630fa1e76dc25a74148d9e8f

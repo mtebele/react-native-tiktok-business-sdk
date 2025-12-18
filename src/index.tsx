@@ -33,8 +33,11 @@ export enum TikTokEventName {
   INSTALL_APP = 'InstallApp',
   JOIN_GROUP = 'JoinGroup',
   LAUNCH_APP = 'LaunchAPP',
+  /** @deprecated */
   LOAN_APPLICATION = 'LoanApplication',
+  /** @deprecated */
   LOAN_APPROVAL = 'LoanApproval',
+  /** @deprecated */
   LOAN_DISBURSAL = 'LoanDisbursal',
   LOGIN = 'Login',
   RATE = 'Rate',
@@ -96,28 +99,119 @@ type EventProps = {
 };
 
 /**
+ * Validates and normalizes TikTok App ID(s) to comma-separated string format.
+ * @param ttAppId - Single TikTok App ID or array of App IDs
+ * @returns Normalized comma-separated string
+ * @throws Error with specific code and message for validation failures
+ */
+function validateAndNormalizeTikTokAppId(ttAppId: string | string[]): string {
+  // Validate empty ttAppId
+  if (!ttAppId) {
+    throw new Error('INVALID_TTAPPID_EMPTY: TikTok App ID cannot be empty');
+  }
+
+  // Handle array format
+  if (Array.isArray(ttAppId)) {
+    if (ttAppId.length === 0) {
+      throw new Error('INVALID_TTAPPID_EMPTY: TikTok App ID cannot be empty');
+    }
+    // Validate each element
+    for (let i = 0; i < ttAppId.length; i++) {
+      const appId = ttAppId[i];
+      if (!appId) {
+        throw new Error('INVALID_TTAPPID_EMPTY: TikTok App ID cannot be empty');
+      }
+      if (!/^\d+$/.test(appId)) {
+        throw new Error(
+          `INVALID_TTAPPID_FORMAT: TikTok App ID must contain only numbers and commas (e.g., '123,456,789')`
+        );
+      }
+    }
+
+    // Join with commas
+    return ttAppId.join(',');
+  }
+
+  // Check for spaces
+  if (/\s/.test(ttAppId)) {
+    throw new Error(
+      'INVALID_TTAPPID_SPACES: TikTok App ID must contain only numbers and commas. Spaces are not allowed.'
+    );
+  }
+
+  // Check for full-width commas
+  if (ttAppId.includes('\uff0c')) {
+    throw new Error(
+      'INVALID_TTAPPID_FULLWIDTH_COMMA: TikTok App ID contains full-width comma. Please use standard comma (,)'
+    );
+  }
+
+  // Check for trailing or leading commas
+  if (ttAppId.startsWith(',') || ttAppId.endsWith(',')) {
+    throw new Error(
+      'INVALID_TTAPPID_TRAILING_COMMA: TikTok App ID cannot have trailing or leading commas'
+    );
+  }
+
+  // Check for consecutive commas
+  if (/,,/.test(ttAppId)) {
+    throw new Error(
+      'INVALID_TTAPPID_CONSECUTIVE_COMMAS: TikTok App ID cannot have consecutive commas'
+    );
+  }
+
+  // Check format: only digits and commas
+  if (!/^[\d,]+$/.test(ttAppId)) {
+    throw new Error(
+      `INVALID_TTAPPID_FORMAT: TikTok App ID must contain only numbers and commas (e.g., '123,456,789')`
+    );
+  }
+
+  return ttAppId;
+}
+
+/**
  * Initializes the TikTok SDK.
- * @param appId - Your app ID (e.g., Android package name or iOS listing ID)
- * @param ttAppId - Your TikTok App ID from TikTok Events Manager
+ * @param appId - Your app ID: Android package name or iOS listing ID, eg: com.sample.app (from Play Store) or 9876543 (from App Store)
+ * @param ttAppId - Your TikTok App ID (string) or App IDs (array). Array format: ['11', '22', '33']. Comma-separated string format: '11,22,33'
  * @param accessToken - Your access token from TikTok Events Manager
  * @param debug - Whether to enable debug mode
  * @returns A promise that resolves when the SDK is initialized.
  */
 export const initializeSdk = async (
   appId: string,
-  ttAppId: string,
+  ttAppId: string | string[],
   accessToken: string,
   debug?: Boolean
-): Promise<string> =>
-  await TikTokBusinessModule.initializeSdk(
+): Promise<string> => {
+  const normalizedTtAppId = validateAndNormalizeTikTokAppId(ttAppId);
+  return await TikTokBusinessModule.initializeSdk(
     appId,
-    ttAppId,
+    normalizedTtAppId,
     accessToken,
     debug || false
   );
+};
 
 /**
- * Identifies the user.
+ * Identifies the user with their information for tracking purposes.
+ * All parameters are required by the TikTok Business SDK.
+ *
+ * @param externalId - Unique external user ID from your system
+ * @param externalUserName - User's username or display name
+ * @param phoneNumber - User's phone number (e.g., '+1234567890')
+ * @param email - User's email address
+ * @returns A promise that resolves when the user is identified successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.identify(
+ *   'user_12345',
+ *   'john_doe',
+ *   '+1234567890',
+ *   'john@example.com'
+ * );
+ * ```
  */
 export const identify = async (
   externalId: string,
@@ -133,10 +227,35 @@ export const identify = async (
   );
 
 /**
- * Logs out the user.
+ * Logs out the current user and clears their identification information.
+ * Call this method when a user signs out of your application.
+ *
+ * @returns A promise that resolves when the user is logged out successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.logout();
+ * ```
  */
 export const logout = async (): Promise<string> =>
   await TikTokBusinessModule.logout();
+
+/**
+ * Manually flushes pending events to TikTok's servers.
+ *
+ * Normally, events are batched and sent automatically based on time intervals
+ * or event count thresholds. This method forces immediate synchronization of
+ * all pending events, which is useful before app termination or at critical moments.
+ *
+ * @returns A promise that resolves when events are flushed successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.flush();
+ * ```
+ */
+export const flush = async (): Promise<string> =>
+  await TikTokBusinessModule.flush();
 
 /**
  * Reports a standard event.
@@ -230,6 +349,7 @@ export const TikTokBusiness = {
   initializeSdk,
   identify,
   logout,
+  flush,
   trackEvent,
   trackContentEvent,
   trackCustomEvent,

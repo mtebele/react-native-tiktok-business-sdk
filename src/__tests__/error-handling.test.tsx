@@ -29,7 +29,7 @@ describe('Error Handling - Module Not Linked', () => {
 
     // Should throw the linking error immediately when trying to call
     await expect(async () => {
-      await initializeSdk('test', 'test', 'test-token');
+      await initializeSdk('test', '123456', 'test-token');
     }).rejects.toThrow('react-native-tiktok-business');
   });
 
@@ -80,7 +80,7 @@ describe('Error Handling - Module Not Linked', () => {
 
     // All methods should throw the linking error
     await expect(async () => {
-      await initializeSdk('test', 'test', 'test-token');
+      await initializeSdk('test', '123456', 'test-token');
     }).rejects.toThrow('react-native-tiktok-business');
 
     await expect(async () => {

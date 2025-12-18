@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2025-12-18
+
+### 🚀 Major Updates
+
+- **Updated to TikTok Business SDK v1.6.0** (iOS and Android)
+
+### ✨ Features
+
+- **Added `flush()` method** for manual event synchronization
+
+### 📚 Documentation
+
+- **Added JSDoc annotations** for identify, logout, and flush methods
+
+### 🗑️ Deprecations
+
+- **Deprecated loan-related events**:
+  - `LOAN_APPLICATION` (deprecated)
+  - `LOAN_APPROVAL` (deprecated)
+  - `LOAN_DISBURSAL` (deprecated)
+
+### 📱 Platform Updates
+
+- **iOS**: Updated to TikTokBusinessSDK v1.6.0 via CocoaPods
+- **Android**: Updated to tiktok-business-android-sdk v1.6.0 via Gradle
+
 ## [1.5.0] - 2025-09-09
 
 ### 🚀 Major Updates

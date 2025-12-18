@@ -31,7 +31,7 @@ describe('Integration Tests', () => {
       // 1. Initialize SDK
       await TikTokBusiness.initializeSdk(
         'com.example.app',
-        'tt123456',
+        '123456',
         'test-token',
         true
       );
@@ -161,7 +161,7 @@ describe('Integration Tests', () => {
       // 1. Initialize SDK
       await TikTokBusiness.initializeSdk(
         'com.example.game',
-        'tt654321',
+        '654321',
         'test-token',
         false
       );
@@ -239,7 +239,7 @@ describe('Integration Tests', () => {
       // 1. Initialize SDK (succeeds)
       await TikTokBusiness.initializeSdk(
         'com.example.app',
-        'tt123456',
+        '123456',
         'test-token'
       );
 
@@ -282,11 +282,7 @@ describe('Integration Tests', () => {
 
       // 1. Try to initialize SDK (fails)
       await expect(
-        TikTokBusiness.initializeSdk(
-          'com.example.app',
-          'invalid_id',
-          'test-token'
-        )
+        TikTokBusiness.initializeSdk('com.example.app', '123456', 'test-token')
       ).rejects.toThrow('SDK initialization failed');
 
       // 2. Try to track event anyway (should still work at JS level)
@@ -479,6 +475,110 @@ describe('Integration Tests', () => {
           query: 'initial_query',
         })
       );
+    });
+  });
+
+  describe('Multiple TikTok App IDs', () => {
+    it('should initialize SDK with array of App IDs and track events', async () => {
+      // Setup mocks
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+      mockTikTokBusinessModule.trackEvent.mockResolvedValue('tracked');
+      mockTikTokBusinessModule.trackContentEvent.mockResolvedValue('tracked');
+
+      // 1. Initialize SDK with array of App IDs
+      await TikTokBusiness.initializeSdk(
+        'com.example.multiapp',
+        ['11', '22', '33'],
+        'test-token',
+        true
+      );
+
+      // Verify native module received comma-separated string
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'com.example.multiapp',
+        '11,22,33',
+        'test-token',
+        true
+      );
+
+      // 2. Track events after initialization
+      await TikTokBusiness.trackEvent(TikTokEventName.REGISTRATION);
+      await TikTokBusiness.trackContentEvent(
+        TikTokContentEventName.ADD_TO_CART,
+        {
+          [TikTokContentEventParameter.CURRENCY]: 'USD',
+          [TikTokContentEventParameter.VALUE]: '49.99',
+        }
+      );
+
+      // Verify events were tracked
+      expect(mockTikTokBusinessModule.trackEvent).toHaveBeenCalledWith(
+        TikTokEventName.REGISTRATION,
+        null,
+        null
+      );
+      expect(mockTikTokBusinessModule.trackContentEvent).toHaveBeenCalledWith(
+        TikTokContentEventName.ADD_TO_CART,
+        {
+          [TikTokContentEventParameter.CURRENCY]: 'USD',
+          [TikTokContentEventParameter.VALUE]: '49.99',
+        }
+      );
+    });
+
+    it('should work with single App ID in array format', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+
+      await TikTokBusiness.initializeSdk(
+        'com.example.singleapp',
+        ['123456'],
+        'test-token',
+        false
+      );
+
+      // Verify native module received single App ID without comma
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'com.example.singleapp',
+        '123456',
+        'test-token',
+        false
+      );
+    });
+
+    it('should work with comma-separated string (backward compatibility)', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+
+      await TikTokBusiness.initializeSdk(
+        'com.example.legacyapp',
+        '11,22,33',
+        'test-token',
+        true
+      );
+
+      // Verify native module received the string as-is
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'com.example.legacyapp',
+        '11,22,33',
+        'test-token',
+        true
+      );
+    });
+  });
+
+  describe('Flush events workflow', () => {
+    it('should flush events after tracking', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+      mockTikTokBusinessModule.trackEvent.mockResolvedValue('tracked');
+      mockTikTokBusinessModule.flush.mockResolvedValue('flushed');
+
+      // Initialize and track events
+      await TikTokBusiness.initializeSdk('app', '123456', 'token', true);
+      await TikTokBusiness.trackEvent(TikTokEventName.REGISTRATION);
+
+      // Flush events
+      await TikTokBusiness.flush();
+
+      expect(mockTikTokBusinessModule.flush).toHaveBeenCalledTimes(1);
     });
   });
 });

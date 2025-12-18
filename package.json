@@ -1,6 +1,6 @@
 {
   "name": "react-native-tiktok-business-sdk",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A React Native bridge for the TikTok Business SDK",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -42,7 +42,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "release": "release-it"
+    "release": "dotenv release-it --"
   },
   "keywords": [
     "react-native",
@@ -74,6 +74,7 @@
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
     "del-cli": "^5.1.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -82,12 +83,13 @@
     "react": "18.3.1",
     "react-native": "0.75.5",
     "react-native-builder-bob": "^0.37.0",
-    "release-it": "^17.10.0",
+    "release-it": "^19.1.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.44"
+    "@types/react": "^18.2.44",
+    "conventional-changelog-conventionalcommits": "9.0.0"
   },
   "peerDependencies": {
     "react": "*",

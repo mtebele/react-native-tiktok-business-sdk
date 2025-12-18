@@ -87,3 +87,6 @@ nitrogen/
 
 # Testing
 coverage/
+
+# Environment files
+.env

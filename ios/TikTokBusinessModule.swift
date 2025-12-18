@@ -46,7 +46,18 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
       rejecter("LOGOUT_ERROR", "Failed to logout user", error)
     }
   }
-  
+
+  /// Flushes pending events to TikTok's servers.
+  @objc func flush(_ resolver: @escaping RCTPromiseResolveBlock,
+                   rejecter: @escaping RCTPromiseRejectBlock) {
+    do {
+      TikTokBusiness.explicitlyFlush()
+      resolver("Events flushed successfully")
+    } catch {
+      rejecter("FLUSH_ERROR", "Failed to flush events", error)
+    }
+  }
+
   /// Reports a standard event.
   /// If `parameters` is nil or empty, the event is reported without additional properties.
   /// Otherwise, a TTBaseEvent is built with the provided properties.
@@ -196,7 +207,7 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
         return
       }
       
-      let adRevenueEvent: TikTokAdRevenueEvent
+      let adRevenueEvent: TikTokBaseEvent
       if let eventId = eventId, !eventId.isEmpty {
         adRevenueEvent = TikTokAdRevenueEvent(adRevenue: adRevenueDict, eventId: eventId)
       } else {

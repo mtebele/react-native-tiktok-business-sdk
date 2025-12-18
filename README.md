@@ -11,11 +11,10 @@ This library provides a modern, promise-based interface for the TikTok Business 
 
 ## ✨ Features
 
-- 🚀 **TikTok Business SDK v1.5.0** - Latest version with impression-level ad revenue tracking
 - 📱 **Cross-platform** - iOS and Android support
 - 🎯 **Promise-based API** - Modern async/await support
 - 🔒 **TypeScript** - Full type safety and IntelliSense
-- 🧪 **Comprehensive testing** - 93.75% test coverage with 70+ tests
+- 🧪 **Comprehensive testing** - 100% test coverage with 100+ tests
 - 📊 **Event tracking** - Standard, content, custom events, and ad revenue tracking
 - 🛡️ **Error handling** - Robust error handling with specific error codes
 - 🎨 **Developer friendly** - Simple API with detailed documentation
@@ -61,7 +60,7 @@ import { TikTokBusiness } from 'react-native-tiktok-business-sdk';
 
 Before using any event tracking methods, you must initialize the SDK. You can call `initializeSdk` with your appId, tiktokAppId, accessToken, and optionally set debug mode.
 
-> **⚠️ Breaking Change in v1.4.1**: The `accessToken` parameter is now **required** (was optional in previous versions).
+#### Single TikTok App ID
 
 ```js
 async function initializeTikTokSDK() {
@@ -82,6 +81,44 @@ async function initializeTikTokSDK() {
 
 initializeTikTokSDK();
 ```
+
+#### Multiple TikTok App IDs
+
+Starting from SDK v1.3.1, you can track events with multiple TikTok App IDs by passing an array:
+
+```js
+async function initializeTikTokSDKWithMultipleAppIds() {
+  try {
+    await TikTokBusiness.initializeSdk(
+      'YOUR_APP_ID',
+      ['TIKTOK_APP_ID_1', 'TIKTOK_APP_ID_2', 'TIKTOK_APP_ID_3'],  // Array of TikTok App IDs
+      'YOUR_ACCESS_TOKEN',
+      true
+    );
+    console.log('TikTok SDK initialized with multiple App IDs!');
+  } catch (error) {
+    console.error('Error initializing TikTok SDK:', error);
+  }
+}
+```
+
+Alternatively, you can still use comma-separated string format:
+
+```js
+await TikTokBusiness.initializeSdk(
+  'YOUR_APP_ID',
+  '11,22,33',  // Comma-separated App IDs (no spaces)
+  'YOUR_ACCESS_TOKEN',
+  true
+);
+```
+
+**Important Validation Rules:**
+- App IDs must be numeric strings
+- No spaces allowed in comma-separated format
+- No trailing or leading commas
+- Array format is recommended for better readability and type safety
+- All TikTok App IDs must match your App ID (SDK requirement)
 
 ### Identify a User
 
@@ -244,6 +281,23 @@ async function trackImpressionEvent() {
 }
 ```
 
+### Flush Events
+
+Manually flush pending events to TikTok's servers. This is useful when you want to ensure events are sent immediately, such as before the app terminates.
+
+```js
+async function flushEvents() {
+  try {
+    await TikTokBusiness.flush();
+    console.log('Events flushed successfully!');
+  } catch (error) {
+    console.error('Error flushing events:', error);
+  }
+}
+```
+
+> **Note:** Events are normally sent automatically at regular intervals. Only use flush when you need immediate synchronization.
+
 ## API Reference
 
 ### Available Methods
@@ -252,7 +306,7 @@ All methods return promises and support async/await pattern:
 
 ```typescript
 // Initialize SDK (required before any other calls)
-initializeSdk(appId: string, ttAppId: string, accessToken: string, debug?: boolean): Promise<string>
+initializeSdk(appId: string, ttAppId: string | string[], accessToken: string, debug?: boolean): Promise<string>
 
 // User management
 identify(externalId: string, externalUserName: string, phoneNumber: string, email: string): Promise<string>
@@ -263,6 +317,9 @@ trackEvent(eventName: TikTokEventName, eventId?: string, properties?: object): P
 trackContentEvent(eventName: TikTokContentEventName, properties?: object): Promise<string>
 trackCustomEvent(eventName: string, properties?: object): Promise<string>
 trackAdRevenueEvent(adRevenueData: AdRevenueData, eventId?: string): Promise<string>
+
+// Other
+flush(): Promise<string>
 ```
 
 ### Types
@@ -346,34 +403,6 @@ If you're using ProGuard for code obfuscation, add these rules to your `proguard
 -keep class androidx.lifecycle.** { *; }
 -keep class com.android.installreferrer.** { *; }
 ```
-
-## Migration Guide
-
-### Upgrading from v1.3.x to v1.4.1
-
-**Breaking Changes:**
-
-1. **Access Token Required**: The `accessToken` parameter is now mandatory in `initializeSdk()`:
-   ```js
-   // Before (v1.3.x)
-   await TikTokBusiness.initializeSdk(appId, ttAppId, debug);
-   
-   // After (v1.4.1)
-   await TikTokBusiness.initializeSdk(appId, ttAppId, accessToken, debug);
-   ```
-
-2. **Promise-based API**: All methods now return promises (improved error handling):
-   ```js
-   // Before (v1.3.x)
-   TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // void
-   
-   // After (v1.4.1)
-   await TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // Promise<string>
-   ```
-
-3. **Updated Dependencies**: 
-   - iOS: TikTok Business SDK v1.4.1
-   - Android: TikTok Business SDK v1.4.1
 
 ## Troubleshooting
 

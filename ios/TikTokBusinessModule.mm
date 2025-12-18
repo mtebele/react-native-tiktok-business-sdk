@@ -12,6 +12,9 @@ RCT_EXTERN_METHOD(identify:(NSString *)externalId
 RCT_EXTERN_METHOD(logout:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(flush:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(trackEvent:(NSString *)eventName
                   eventId:(NSString *)eventId
                   parameters:(NSDictionary *)parameters
