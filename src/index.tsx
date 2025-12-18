@@ -33,8 +33,11 @@ export enum TikTokEventName {
   INSTALL_APP = 'InstallApp',
   JOIN_GROUP = 'JoinGroup',
   LAUNCH_APP = 'LaunchAPP',
+  /** @deprecated */
   LOAN_APPLICATION = 'LoanApplication',
+  /** @deprecated */
   LOAN_APPROVAL = 'LoanApproval',
+  /** @deprecated */
   LOAN_DISBURSAL = 'LoanDisbursal',
   LOGIN = 'Login',
   RATE = 'Rate',
@@ -191,7 +194,24 @@ export const initializeSdk = async (
 };
 
 /**
- * Identifies the user.
+ * Identifies the user with their information for tracking purposes.
+ * All parameters are required by the TikTok Business SDK.
+ *
+ * @param externalId - Unique external user ID from your system
+ * @param externalUserName - User's username or display name
+ * @param phoneNumber - User's phone number (e.g., '+1234567890')
+ * @param email - User's email address
+ * @returns A promise that resolves when the user is identified successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.identify(
+ *   'user_12345',
+ *   'john_doe',
+ *   '+1234567890',
+ *   'john@example.com'
+ * );
+ * ```
  */
 export const identify = async (
   externalId: string,
@@ -207,7 +227,15 @@ export const identify = async (
   );
 
 /**
- * Logs out the user.
+ * Logs out the current user and clears their identification information.
+ * Call this method when a user signs out of your application.
+ *
+ * @returns A promise that resolves when the user is logged out successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.logout();
+ * ```
  */
 export const logout = async (): Promise<string> =>
   await TikTokBusinessModule.logout();
