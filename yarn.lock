@@ -5657,7 +5657,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.2.3":
+"dotenv-cli@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "dotenv-cli@npm:11.0.0"
+  dependencies:
+    cross-spawn: ^7.0.6
+    dotenv: ^17.1.0
+    dotenv-expand: ^12.0.0
+    minimist: ^1.2.6
+  bin:
+    dotenv: cli.js
+  checksum: 0dab973aa8d94163f9b17f7452f9c9b567baf67e6551c3d883f3ea1df9edbd69a9ea55cbc8e020026c9e8d8f01056087526d011c1829924483c8c72f9c17c79a
+  languageName: node
+  linkType: hard
+
+"dotenv-expand@npm:^12.0.0":
+  version: 12.0.3
+  resolution: "dotenv-expand@npm:12.0.3"
+  dependencies:
+    dotenv: ^16.4.5
+  checksum: c2de321a3569981197e381be15cd982fe7b325fb234803081cd3c2e2ab725fcc66559e652ff053e176c745218f5ebe105922f87b2922bec55c715c0836a1f3f2
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.4.5":
+  version: 16.6.1
+  resolution: "dotenv@npm:16.6.1"
+  checksum: e8bd63c9a37f57934f7938a9cf35de698097fadf980cb6edb61d33b3e424ceccfe4d10f37130b904a973b9038627c2646a3365a904b4406514ea94d7f1816b69
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^17.1.0, dotenv@npm:^17.2.3":
   version: 17.2.3
   resolution: "dotenv@npm:17.2.3"
   checksum: fde23eb88649041ec7a0f6a47bbe59cac3c454fc2007cf2e40b9c984aaf0636347218c56cfbbf067034b0a73f530a2698a19b4058695787eb650ec69fe234624
@@ -11054,6 +11084,7 @@ __metadata:
     "@types/jest": ^29.5.5
     "@types/react": ^18.2.44
     del-cli: ^5.1.0
+    dotenv-cli: ^11.0.0
     eslint: ^8.51.0
     eslint-config-prettier: ^9.0.0
     eslint-plugin-prettier: ^5.0.1

@@ -42,7 +42,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "release": "release-it"
+    "release": "dotenv release-it --"
   },
   "keywords": [
     "react-native",
@@ -74,6 +74,7 @@
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
     "del-cli": "^5.1.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
