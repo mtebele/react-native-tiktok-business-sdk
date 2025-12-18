@@ -241,6 +241,23 @@ export const logout = async (): Promise<string> =>
   await TikTokBusinessModule.logout();
 
 /**
+ * Manually flushes pending events to TikTok's servers.
+ *
+ * Normally, events are batched and sent automatically based on time intervals
+ * or event count thresholds. This method forces immediate synchronization of
+ * all pending events, which is useful before app termination or at critical moments.
+ *
+ * @returns A promise that resolves when events are flushed successfully
+ *
+ * @example
+ * ```typescript
+ * await TikTokBusiness.flush();
+ * ```
+ */
+export const flush = async (): Promise<string> =>
+  await TikTokBusinessModule.flush();
+
+/**
  * Reports a standard event.
  * Accepts an optional eventId and additional properties.
  */
@@ -332,6 +349,7 @@ export const TikTokBusiness = {
   initializeSdk,
   identify,
   logout,
+  flush,
   trackEvent,
   trackContentEvent,
   trackCustomEvent,

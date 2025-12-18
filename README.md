@@ -282,6 +282,29 @@ async function trackImpressionEvent() {
 }
 ```
 
+### Flush Events
+
+Manually flush pending events to TikTok's servers. This is useful when you want to ensure events are sent immediately, such as before the app terminates.
+
+```js
+async function flushEvents() {
+  try {
+    await TikTokBusiness.flush();
+    console.log('Events flushed successfully!');
+  } catch (error) {
+    console.error('Error flushing events:', error);
+  }
+}
+```
+
+**When to use flush:**
+- Before app termination or backgrounding
+- After critical user actions you want to track immediately
+- When switching between different user sessions
+- During app state transitions
+
+> **Note:** Events are normally sent automatically at regular intervals. Only use flush when you need immediate synchronization.
+
 ## API Reference
 
 ### Available Methods
@@ -301,6 +324,9 @@ trackEvent(eventName: TikTokEventName, eventId?: string, properties?: object): P
 trackContentEvent(eventName: TikTokContentEventName, properties?: object): Promise<string>
 trackCustomEvent(eventName: string, properties?: object): Promise<string>
 trackAdRevenueEvent(adRevenueData: AdRevenueData, eventId?: string): Promise<string>
+
+// Other
+flush(): Promise<string>
 ```
 
 ### Types

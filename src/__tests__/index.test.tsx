@@ -4,6 +4,7 @@ import {
   initializeSdk,
   identify,
   logout,
+  flush,
   trackEvent,
   trackContentEvent,
   trackCustomEvent,
@@ -155,7 +156,7 @@ describe('TikTokBusiness', () => {
         );
       });
 
-      it.only('should reject empty array', async () => {
+      it('should reject empty array', async () => {
         await expect(initializeSdk('app-id', [], 'token')).rejects.toThrow(
           'INVALID_TTAPPID_EMPTY'
         );
@@ -260,6 +261,23 @@ describe('TikTokBusiness', () => {
       mockTikTokBusinessModule.logout.mockRejectedValue(error);
 
       await expect(logout()).rejects.toThrow('Logout failed');
+    });
+  });
+
+  describe('flush', () => {
+    it('should call native module flush', async () => {
+      mockTikTokBusinessModule.flush.mockResolvedValue('success');
+
+      await flush();
+
+      expect(mockTikTokBusinessModule.flush).toHaveBeenCalled();
+    });
+
+    it('should handle flush errors', async () => {
+      const error = new Error('Flush failed');
+      mockTikTokBusinessModule.flush.mockRejectedValue(error);
+
+      await expect(flush()).rejects.toThrow('Flush failed');
     });
   });
 

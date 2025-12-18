@@ -564,4 +564,21 @@ describe('Integration Tests', () => {
       );
     });
   });
+
+  describe('Flush events workflow', () => {
+    it('should flush events after tracking', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+      mockTikTokBusinessModule.trackEvent.mockResolvedValue('tracked');
+      mockTikTokBusinessModule.flush.mockResolvedValue('flushed');
+
+      // Initialize and track events
+      await TikTokBusiness.initializeSdk('app', '123456', 'token', true);
+      await TikTokBusiness.trackEvent(TikTokEventName.REGISTRATION);
+
+      // Flush events
+      await TikTokBusiness.flush();
+
+      expect(mockTikTokBusinessModule.flush).toHaveBeenCalledTimes(1);
+    });
+  });
 });

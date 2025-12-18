@@ -3,6 +3,7 @@ const mockTikTokBusinessModule = {
   initializeSdk: jest.fn(),
   identify: jest.fn(),
   logout: jest.fn(),
+  flush: jest.fn(),
   trackEvent: jest.fn(),
   trackContentEvent: jest.fn(),
   trackCustomEvent: jest.fn(),

@@ -45,6 +45,19 @@ class TikTokBusinessModule(reactContext: ReactApplicationContext) :
   }
 
   /**
+   * Flushes pending events to TikTok's servers.
+   */
+  @ReactMethod
+  fun flush(promise: Promise) {
+    try {
+      TikTokBusinessSdk.flush()
+      promise.resolve("Events flushed successfully")
+    } catch (e: Exception) {
+      promise.reject("FLUSH_ERROR", "Failed to flush events", e)
+    }
+  }
+
+  /**
    * Maps event name strings to EventName enums.
    */
   private fun getEventNameEnum(eventName: String): EventName? {
