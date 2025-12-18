@@ -196,7 +196,7 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
         return
       }
       
-      let adRevenueEvent: TikTokAdRevenueEvent
+      let adRevenueEvent: TikTokBaseEvent
       if let eventId = eventId, !eventId.isEmpty {
         adRevenueEvent = TikTokAdRevenueEvent(adRevenue: adRevenueDict, eventId: eventId)
       } else {
