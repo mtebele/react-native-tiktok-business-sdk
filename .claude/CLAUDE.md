@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaScript apps to initialize the TikTok SDK, identify users, and track various events (standard, content, and custom events). The library supports both iOS and Android platforms with promise-based async APIs.
+This is a React Native bridge for the TikTok Business SDK v1.6.0, enabling JavaScript apps to initialize the TikTok SDK, identify users, track various events (standard, content, and custom events), and manually flush pending events. The library supports both iOS and Android platforms with promise-based async APIs.
 
 ## Development Commands
 
@@ -35,12 +35,13 @@ This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaS
 ### Key Components
 
 #### JavaScript Bridge (src/index.tsx)
-- Exports main `TikTokBusiness` object with methods: `initializeSdk`, `identify`, `logout`, `trackEvent`, `trackContentEvent`, `trackCustomEvent`
+- Exports main `TikTokBusiness` object with methods: `initializeSdk`, `identify`, `logout`, `flush`, `trackEvent`, `trackContentEvent`, `trackCustomEvent`
 - All methods return promises for proper async/await handling
 - **initializeSdk**: Requires appId, ttAppId (string or array), accessToken (mandatory in v1.4.1), and optional debug flag
   - **ttAppId** supports: single App ID string, array of App IDs (converted to comma-separated string), or comma-separated string
   - Includes validation utility function that enforces strict formatting rules
 - **identify**: Takes 4 parameters: externalId, externalUserName, phoneNumber, email (uses `identifyWithExternalID` internally)
+- **flush**: No parameters, forces immediate flush of pending events to network
 - Defines enums for event names and parameters:
   - `TikTokEventName`: Standard events (REGISTRATION, LOGIN, etc.)
   - `TikTokContentEventName`: Content events (ADD_TO_CART, PURCHASE, etc.)
@@ -48,20 +49,21 @@ This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaS
   - `TikTokContentEventContentsParameter`: Content item parameters
 
 #### Native Modules
-- **Android**: `android/src/main/java/com/tiktokbusiness/TikTokBusinessModule.kt` (TikTok Business SDK v1.4.1)
-- **iOS**: `ios/TikTokBusinessModule.swift` (TikTok Business SDK v1.4.1)
+- **Android**: `android/src/main/java/com/tiktokbusiness/TikTokBusinessModule.kt` (TikTok Business SDK v1.6.0)
+- **iOS**: `ios/TikTokBusinessModule.swift` (TikTok Business SDK v1.6.0)
 - **iOS Bridge**: `ios/TikTokBusinessModule.mm` (Objective-C bridge declarations)
 - Both implement promise-based async methods using RCTPromiseResolveBlock/RCTPromiseRejectBlock
 - **iOS Implementation Notes**:
-  - Uses modern TikTok SDK APIs: `identifyWithExternalID`, `trackTTEvent`, `initializeSdk` with completionHandler
+  - Uses modern TikTok SDK APIs: `identifyWithExternalID`, `trackTTEvent`, `initializeSdk` with completionHandler, `explicitlyFlush`
   - Avoids deprecated methods like `trackEvent` (use `trackTTEvent` instead)
-  - Proper error handling with specific error codes (INIT_ERROR, IDENTIFY_ERROR, etc.)
+  - Proper error handling with specific error codes (INIT_ERROR, IDENTIFY_ERROR, FLUSH_ERROR, etc.)
   - Uses `TikTokConfig(accessToken:appId:tiktokAppId:)` constructor pattern
   - **Critical**: `.mm` bridge file must declare `resolver` and `rejecter` parameters for all promise-based methods
 - **Android Implementation Notes**:
   - Uses promise-based async methods with proper error handling
   - Implements `TTInitCallback` for initialization success/failure handling
   - Uses `TTConfig.setAccessToken()` for mandatory access token
+  - Calls `TikTokBusinessSdk.flush()` for manual event synchronization
   - Proper try-catch blocks around all native SDK calls
 
 ### Build System
@@ -110,20 +112,22 @@ This is a React Native bridge for the TikTok Business SDK v1.4.1, enabling JavaS
 ## Important Notes
 
 ### SDK Version and Compatibility
-- Updated to TikTok Business SDK v1.4.1 (iOS and Android)
-- **Breaking Change**: `accessToken` is now mandatory in `initializeSdk` (required by v1.4.1)
+- Updated to TikTok Business SDK v1.6.0 (iOS and Android)
+- **Breaking Change**: `accessToken` is now mandatory in `initializeSdk` (required by v1.4.1+)
 - Uses modern, non-deprecated APIs throughout (future-proof implementation)
+- **New in v1.6.0**: Manual event flushing via `flush()` method
 
 ### Development Requirements
 - The library requires native linking (not compatible with Expo Go)
-- iOS: Uses CocoaPods with TikTokBusinessSDK v1.4.1 dependency
-- Android: Uses Gradle with tiktok-business-android-sdk v1.4.1 dependency
+- iOS: Uses CocoaPods with TikTokBusinessSDK v1.6.0 dependency
+- Android: Uses Gradle with tiktok-business-android-sdk v1.6.0 dependency
 - Android requires ProGuard rules for TikTok classes: `-keep class com.tiktok.** { *; }`
 
 ### API Signatures
 - All native methods are async and return promises with proper error handling
 - `initializeSdk(appId, ttAppId: string | string[], accessToken, debug?)` - ttAppId accepts array or string, accessToken is required
 - `identify(externalId, externalUserName, phoneNumber, email)` - all 4 parameters required
+- `flush()` - manually flush pending events (no parameters required)
 - Error handling tests may show expected errors in console - this is normal behavior
 
 ### TikTok App ID Validation

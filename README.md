@@ -11,11 +11,10 @@ This library provides a modern, promise-based interface for the TikTok Business 
 
 ## ✨ Features
 
-- 🚀 **TikTok Business SDK v1.5.0** - Latest version with impression-level ad revenue tracking
 - 📱 **Cross-platform** - iOS and Android support
 - 🎯 **Promise-based API** - Modern async/await support
 - 🔒 **TypeScript** - Full type safety and IntelliSense
-- 🧪 **Comprehensive testing** - 93.75% test coverage with 70+ tests
+- 🧪 **Comprehensive testing** - 100% test coverage with 100+ tests
 - 📊 **Event tracking** - Standard, content, custom events, and ad revenue tracking
 - 🛡️ **Error handling** - Robust error handling with specific error codes
 - 🎨 **Developer friendly** - Simple API with detailed documentation
@@ -83,7 +82,7 @@ async function initializeTikTokSDK() {
 initializeTikTokSDK();
 ```
 
-#### Multiple TikTok App IDs (Recommended)
+#### Multiple TikTok App IDs
 
 Starting from SDK v1.3.1, you can track events with multiple TikTok App IDs by passing an array:
 
@@ -297,12 +296,6 @@ async function flushEvents() {
 }
 ```
 
-**When to use flush:**
-- Before app termination or backgrounding
-- After critical user actions you want to track immediately
-- When switching between different user sessions
-- During app state transitions
-
 > **Note:** Events are normally sent automatically at regular intervals. Only use flush when you need immediate synchronization.
 
 ## API Reference
@@ -410,34 +403,6 @@ If you're using ProGuard for code obfuscation, add these rules to your `proguard
 -keep class androidx.lifecycle.** { *; }
 -keep class com.android.installreferrer.** { *; }
 ```
-
-## Migration Guide
-
-### Upgrading from v1.3.x to v1.4.1
-
-**Breaking Changes:**
-
-1. **Access Token Required**: The `accessToken` parameter is now mandatory in `initializeSdk()`:
-   ```js
-   // Before (v1.3.x)
-   await TikTokBusiness.initializeSdk(appId, ttAppId, debug);
-   
-   // After (v1.4.1)
-   await TikTokBusiness.initializeSdk(appId, ttAppId, accessToken, debug);
-   ```
-
-2. **Promise-based API**: All methods now return promises (improved error handling):
-   ```js
-   // Before (v1.3.x)
-   TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // void
-   
-   // After (v1.4.1)
-   await TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // Promise<string>
-   ```
-
-3. **Updated Dependencies**: 
-   - iOS: TikTok Business SDK v1.4.1
-   - Android: TikTok Business SDK v1.4.1
 
 ## Troubleshooting
 
