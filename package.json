@@ -143,6 +143,9 @@
       }
     }
   },
+  "overrides": {
+    "conventional-changelog-conventionalcommits": "^9.0.2"
+  },
   "eslintConfig": {
     "root": true,
     "extends": [
