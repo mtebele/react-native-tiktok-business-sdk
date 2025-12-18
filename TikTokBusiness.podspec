@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift}"
   
   s.dependency "React-Core"
-  s.dependency "TikTokBusinessSDK", "1.5.0"
+  s.dependency "TikTokBusinessSDK", "1.6.0"
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
