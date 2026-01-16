@@ -15,6 +15,81 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
   static func requiresMainQueueSetup() -> Bool {
     return false
   }
+
+  private let ttCurrencyMap: [String: TTCurrency] = [
+    "AED": TTCurrency.AED,
+    "ARS": TTCurrency.ARS,
+    "AUD": TTCurrency.AUD,
+    "BDT": TTCurrency.BDT,
+    "BGN": TTCurrency.BGN,
+    "BHD": TTCurrency.BHD,
+    "BIF": TTCurrency.BIF,
+    "BOB": TTCurrency.BOB,
+    "BRL": TTCurrency.BRL,
+    "CAD": TTCurrency.CAD,
+    "CHF": TTCurrency.CHF,
+    "CLP": TTCurrency.CLP,
+    "CNY": TTCurrency.CNY,
+    "COP": TTCurrency.COP,
+    "CRC": TTCurrency.CRC,
+    "CZK": TTCurrency.CZK,
+    "DKK": TTCurrency.DKK,
+    "DZD": TTCurrency.DZD,
+    "EGP": TTCurrency.EGP,
+    "EUR": TTCurrency.EUR,
+    "GBP": TTCurrency.GBP,
+    "GTQ": TTCurrency.GTQ,
+    "HKD": TTCurrency.HKD,
+    "HNL": TTCurrency.HNL,
+    "HUF": TTCurrency.HUF,
+    "IDR": TTCurrency.IDR,
+    "ILS": TTCurrency.ILS,
+    "INR": TTCurrency.INR,
+    "IQD": TTCurrency.IQD,
+    "ISK": TTCurrency.ISK,
+    "JOD": TTCurrency.JOD,
+    "JPY": TTCurrency.JPY,
+    "KES": TTCurrency.KES,
+    "KHR": TTCurrency.KHR,
+    "KRW": TTCurrency.KRW,
+    "KWD": TTCurrency.KWD,
+    "KZT": TTCurrency.KZT,
+    "LBP": TTCurrency.LBP,
+    "MAD": TTCurrency.MAD,
+    "MOP": TTCurrency.MOP,
+    "MXN": TTCurrency.MXN,
+    "MYR": TTCurrency.MYR,
+    "NGN": TTCurrency.NGN,
+    "NIO": TTCurrency.NIO,
+    "NOK": TTCurrency.NOK,
+    "NZD": TTCurrency.NZD,
+    "OMR": TTCurrency.OMR,
+    "PEN": TTCurrency.PEN,
+    "PHP": TTCurrency.PHP,
+    "PKR": TTCurrency.PKR,
+    "PLN": TTCurrency.PLN,
+    "PYG": TTCurrency.PYG,
+    "QAR": TTCurrency.QAR,
+    "RON": TTCurrency.RON,
+    "RUB": TTCurrency.RUB,
+    "SAR": TTCurrency.SAR,
+    "SEK": TTCurrency.SEK,
+    "SGD": TTCurrency.SGD,
+    "THB": TTCurrency.THB,
+    "TRY": TTCurrency.TRY,
+    "TWD": TTCurrency.TWD,
+    "TZS": TTCurrency.TZS,
+    "UAH": TTCurrency.UAH,
+    "USD": TTCurrency.USD,
+    "VES": TTCurrency.VES,
+    "VND": TTCurrency.VND,
+    "ZAR": TTCurrency.ZAR,
+  ]
+
+  private func mapCurrency(_ code: String) -> TTCurrency {
+    let upper = code.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    return ttCurrencyMap[upper] ?? TTCurrency.USD
+  }
   
   // MARK: - Public Methods Exposed to JS
   
@@ -119,9 +194,7 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
           event.setDescription(description)
         }
         if let currencyStr = props["CURRENCY"] as? String {
-          // Map currency string to TTCurrency enum - using USD as default
-          let currency = TTCurrency.USD // You may want to add proper currency mapping
-          event.setCurrency(currency)
+          event.setCurrency(mapCurrency(currencyStr))
         }
         if let value = props["VALUE"] as? NSNumber {
           event.setValue(value.stringValue)
