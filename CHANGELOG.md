@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-04-25
+
+### 🚀 Major Updates
+
+- **Updated to TikTok Business SDK v1.6.1** (iOS and Android)
+
+### 📱 Platform Updates
+
+- **iOS**: Updated to TikTokBusinessSDK v1.6.1 via CocoaPods
+- **Android**: Updated to tiktok-business-android-sdk v1.6.1 via Gradle
+
 ## [1.6.0] - 2025-12-18
 
 ### 🚀 Major Updates
@@ -53,12 +64,12 @@ Event names now use camelCase format to match the official TikTok Business SDK:
 
 ```js
 // Before (v1.4.1 and earlier)
-TikTokEventName.START_TRIAL = 'START_TRIAL'
-TikTokEventName.ADD_PAYMENT_INFO = 'ADD_PAYMENT_INFO'
+TikTokEventName.START_TRIAL = 'START_TRIAL';
+TikTokEventName.ADD_PAYMENT_INFO = 'ADD_PAYMENT_INFO';
 
 // After (v1.5.0)
-TikTokEventName.START_TRIAL = 'StartTrial'
-TikTokEventName.ADD_PAYMENT_INFO = 'AddPaymentInfo'
+TikTokEventName.START_TRIAL = 'StartTrial';
+TikTokEventName.ADD_PAYMENT_INFO = 'AddPaymentInfo';
 ```
 
 **Migration**: No code changes needed if using the enum constants. Only affects you if using hardcoded string values.
@@ -114,20 +125,22 @@ TikTokEventName.ADD_PAYMENT_INFO = 'AddPaymentInfo'
 
 ### ⚠️ Breaking Changes
 
-1. **Access Token Required**: 
+1. **Access Token Required**:
+
    ```js
    // Before (v1.3.x)
    await TikTokBusiness.initializeSdk(appId, ttAppId, debug);
-   
+
    // After (v1.4.1)
    await TikTokBusiness.initializeSdk(appId, ttAppId, accessToken, debug);
    ```
 
 2. **Promise-based API**: All methods now return promises
+
    ```js
    // Before (v1.3.x)
    TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // void
-   
+
    // After (v1.4.1)
    await TikTokBusiness.trackEvent(TikTokEventName.LOGIN); // Promise<string>
    ```
@@ -144,6 +157,7 @@ To upgrade from v1.3.x to v1.4.1:
 ## [1.3.x] - Previous Versions
 
 ### Features
+
 - Basic TikTok Business SDK integration
 - iOS and Android support
 - Standard event tracking
@@ -152,6 +166,7 @@ To upgrade from v1.3.x to v1.4.1:
 - User identification and logout
 
 ### Technical Details
+
 - TikTok Business SDK v1.3.x
 - Callback-based API
 - Basic error handling
