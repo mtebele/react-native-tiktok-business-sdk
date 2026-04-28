@@ -13,6 +13,15 @@ const mockTikTokBusinessModule =
     typeof NativeModules.TikTokBusinessModule
   >;
 
+const defaultInitOptions = {
+  debug: false,
+  disableAutomaticTracking: false,
+  disableInstallTracking: false,
+  disableLaunchTracking: false,
+  disableRetentionTracking: false,
+  disablePaymentTracking: false,
+};
+
 describe('Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -498,7 +507,10 @@ describe('Integration Tests', () => {
         'com.example.multiapp',
         '11,22,33',
         'test-token',
-        true
+        {
+          ...defaultInitOptions,
+          debug: true,
+        }
       );
 
       // 2. Track events after initialization
@@ -541,7 +553,7 @@ describe('Integration Tests', () => {
         'com.example.singleapp',
         '123456',
         'test-token',
-        false
+        defaultInitOptions
       );
     });
 
@@ -560,7 +572,35 @@ describe('Integration Tests', () => {
         'com.example.legacyapp',
         '11,22,33',
         'test-token',
-        true
+        {
+          ...defaultInitOptions,
+          debug: true,
+        }
+      );
+    });
+
+    it('should initialize SDK with automatic tracking controls', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('initialized');
+
+      await TikTokBusiness.initializeSdk(
+        'com.example.privacy',
+        '123456',
+        'token',
+        {
+          disableAutomaticTracking: true,
+          disablePaymentTracking: true,
+        }
+      );
+
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'com.example.privacy',
+        '123456',
+        'token',
+        {
+          ...defaultInitOptions,
+          disableAutomaticTracking: true,
+          disablePaymentTracking: true,
+        }
       );
     });
   });

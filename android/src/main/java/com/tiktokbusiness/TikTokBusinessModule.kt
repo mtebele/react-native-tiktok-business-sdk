@@ -253,13 +253,39 @@ class TikTokBusinessModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun initializeSdk(appId: String, ttAppId: String, accessToken: String, debug: Boolean?, promise: Promise) {
+  fun initializeSdk(
+    appId: String,
+    ttAppId: String,
+    accessToken: String,
+    options: ReadableMap?,
+    promise: Promise
+  ) {
     try {
       val configBuilder =
         TikTokBusinessSdk.TTConfig(reactApplicationContext, accessToken).setAppId(appId).setTTAppId(ttAppId)
 
-      if (debug == true) {
+      if (getBooleanOption(options, "debug")) {
         configBuilder.openDebugMode().setLogLevel(TikTokBusinessSdk.LogLevel.DEBUG)
+      }
+
+      if (getBooleanOption(options, "disableAutomaticTracking")) {
+        configBuilder.disableAutoEvents()
+      }
+
+      if (getBooleanOption(options, "disableInstallTracking")) {
+        configBuilder.disableInstallLogging()
+      }
+
+      if (getBooleanOption(options, "disableLaunchTracking")) {
+        configBuilder.disableLaunchLogging()
+      }
+
+      if (getBooleanOption(options, "disableRetentionTracking")) {
+        configBuilder.disableRetentionLogging()
+      }
+
+      if (getBooleanOption(options, "disablePaymentTracking")) {
+        configBuilder.disableAutoIapTrack()
       }
 
       TikTokBusinessSdk.initializeSdk(configBuilder, object : TikTokBusinessSdk.TTInitCallback {
@@ -275,6 +301,12 @@ class TikTokBusinessModule(reactContext: ReactApplicationContext) :
     } catch (e: Exception) {
       promise.reject("INIT_ERROR", "Failed to initialize TikTok SDK", e)
     }
+  }
+
+  private fun getBooleanOption(options: ReadableMap?, key: String): Boolean {
+    return options?.hasKey(key) == true &&
+      options.getType(key) == ReadableType.Boolean &&
+      options.getBoolean(key)
   }
 
   companion object {

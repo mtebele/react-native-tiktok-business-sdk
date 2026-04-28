@@ -222,19 +222,38 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
   }
   
   /// Initializes the TikTok SDK.
-  /// Accepts appId, ttAppId, accessToken, and an optional debug flag.
-  @objc func initializeSdk(_ appId: String, 
-                          ttAppId: String, 
-                          accessToken: String, 
-                          debug: NSNumber, 
+  /// Accepts appId, ttAppId, accessToken, and initialization options.
+  @objc func initializeSdk(_ appId: String,
+                          ttAppId: String,
+                          accessToken: String,
+                          options: NSDictionary,
                           resolver: @escaping RCTPromiseResolveBlock,
                           rejecter: @escaping RCTPromiseRejectBlock) {
     let config = TikTokConfig(accessToken: accessToken, appId: appId, tiktokAppId: ttAppId)
     
-    let debugValue = debug.boolValue
-    if debugValue {
+    if options["debug"] as? Bool == true {
       config?.enableDebugMode()
       config?.setLogLevel(TikTokLogLevelDebug)
+    }
+
+    if options["disableAutomaticTracking"] as? Bool == true {
+      config?.disableAutomaticTracking()
+    }
+
+    if options["disableInstallTracking"] as? Bool == true {
+      config?.disableInstallTracking()
+    }
+
+    if options["disableLaunchTracking"] as? Bool == true {
+      config?.disableLaunchTracking()
+    }
+
+    if options["disableRetentionTracking"] as? Bool == true {
+      config?.disableRetentionTracking()
+    }
+
+    if options["disablePaymentTracking"] as? Bool == true {
+      config?.disablePaymentTracking()
     }
     
     TikTokBusiness.initializeSdk(config) { success, error in

@@ -12,6 +12,7 @@ import {
   TikTokContentEventParameter,
   TikTokContentEventContentsParameter,
 } from '../index';
+import type { TikTokInitializeOptions } from '../index';
 
 // Get the mocked module
 const mockTikTokBusinessModule =
@@ -38,6 +39,24 @@ describe('TypeScript Type Validation', () => {
         initializeSdk('app-id', '123456', 'test-token');
         initializeSdk('app-id', '123456', 'test-token', true);
         initializeSdk('app-id', '123456', 'test-token', false);
+        initializeSdk('app-id', '123456', 'test-token', {
+          debug: true,
+          disableAutomaticTracking: true,
+          disableInstallTracking: true,
+          disableLaunchTracking: true,
+          disableRetentionTracking: true,
+          disablePaymentTracking: true,
+        });
+      }).not.toThrow();
+    });
+
+    it('should expose initialization options type', () => {
+      const options: TikTokInitializeOptions = {
+        disableLaunchTracking: true,
+      };
+
+      expect(() => {
+        initializeSdk('app-id', '123456', 'test-token', options);
       }).not.toThrow();
     });
 

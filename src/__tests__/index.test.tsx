@@ -22,6 +22,15 @@ const mockTikTokBusinessModule =
     typeof NativeModules.TikTokBusinessModule
   >;
 
+const defaultInitOptions = {
+  debug: false,
+  disableAutomaticTracking: false,
+  disableInstallTracking: false,
+  disableLaunchTracking: false,
+  disableRetentionTracking: false,
+  disablePaymentTracking: false,
+};
+
 describe('TikTokBusiness', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -42,11 +51,14 @@ describe('TikTokBusiness', () => {
         appId,
         ttAppId,
         accessToken,
-        debug
+        {
+          ...defaultInitOptions,
+          debug,
+        }
       );
     });
 
-    it('should default debug to false when not provided', async () => {
+    it('should default initialization options when not provided', async () => {
       const appId = 'test-app-id';
       const ttAppId = '123456';
       const accessToken = 'test-token';
@@ -59,7 +71,47 @@ describe('TikTokBusiness', () => {
         appId,
         ttAppId,
         accessToken,
-        false
+        defaultInitOptions
+      );
+    });
+
+    it('should accept initialization options for automatic tracking controls', async () => {
+      const options = {
+        debug: true,
+        disableAutomaticTracking: true,
+        disableInstallTracking: true,
+        disableLaunchTracking: true,
+        disableRetentionTracking: true,
+        disablePaymentTracking: true,
+      };
+
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('success');
+
+      await initializeSdk('app-id', '123456', 'token', options);
+
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'app-id',
+        '123456',
+        'token',
+        options
+      );
+    });
+
+    it('should default omitted initialization option fields', async () => {
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('success');
+
+      await initializeSdk('app-id', '123456', 'token', {
+        disableLaunchTracking: true,
+      });
+
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        'app-id',
+        '123456',
+        'token',
+        {
+          ...defaultInitOptions,
+          disableLaunchTracking: true,
+        }
       );
     });
 
@@ -87,7 +139,7 @@ describe('TikTokBusiness', () => {
           'app-id',
           '123456',
           'token',
-          false
+          defaultInitOptions
         );
       });
 
@@ -100,7 +152,7 @@ describe('TikTokBusiness', () => {
           'app-id',
           '11,22,33',
           'token',
-          false
+          defaultInitOptions
         );
       });
 
@@ -113,7 +165,7 @@ describe('TikTokBusiness', () => {
           'app-id',
           '11,22,33',
           'token',
-          false
+          defaultInitOptions
         );
       });
 
@@ -126,7 +178,7 @@ describe('TikTokBusiness', () => {
           'app-id',
           '123456',
           'token',
-          false
+          defaultInitOptions
         );
       });
 
@@ -143,7 +195,7 @@ describe('TikTokBusiness', () => {
           'app-id',
           '1,2,3,4,5,6,7,8,9,10',
           'token',
-          false
+          defaultInitOptions
         );
       });
     });

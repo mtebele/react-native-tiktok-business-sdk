@@ -113,6 +113,39 @@ await TikTokBusiness.initializeSdk(
 );
 ```
 
+#### Disable Automatic Events
+
+You can disable TikTok SDK automatic events during initialization by passing an options object as the fourth argument:
+
+```js
+await TikTokBusiness.initializeSdk(
+  'YOUR_APP_ID',
+  'YOUR_TIKTOK_APP_ID',
+  'YOUR_ACCESS_TOKEN',
+  {
+    // Disable all automatic events
+    disableAutomaticTracking: true,
+  }
+);
+```
+
+Or disable only specific automatic event categories:
+
+```js
+await TikTokBusiness.initializeSdk(
+  'YOUR_APP_ID',
+  'YOUR_TIKTOK_APP_ID',
+  'YOUR_ACCESS_TOKEN',
+  {
+    debug: true,
+    disableInstallTracking: true,
+    disableLaunchTracking: true,
+    disableRetentionTracking: true,
+    disablePaymentTracking: true,
+  }
+);
+```
+
 **Important Validation Rules:**
 - App IDs must be numeric strings
 - No spaces allowed in comma-separated format
@@ -306,7 +339,7 @@ All methods return promises and support async/await pattern:
 
 ```typescript
 // Initialize SDK (required before any other calls)
-initializeSdk(appId: string, ttAppId: string | string[], accessToken: string, debug?: boolean): Promise<string>
+initializeSdk(appId: string, ttAppId: string | string[], accessToken: string, options?: boolean | TikTokInitializeOptions): Promise<string>
 
 // User management
 identify(externalId: string, externalUserName: string, phoneNumber: string, email: string): Promise<string>
@@ -337,6 +370,19 @@ interface AdRevenueData {
   country?: string;        // Country code where ad was shown
   precision?: string;      // Precision level of revenue data
   [key: string]: string | number | boolean | undefined; // Additional custom properties
+}
+```
+
+#### TikTokInitializeOptions Interface
+
+```typescript
+interface TikTokInitializeOptions {
+  debug?: boolean;
+  disableAutomaticTracking?: boolean;
+  disableInstallTracking?: boolean;
+  disableLaunchTracking?: boolean;
+  disableRetentionTracking?: boolean;
+  disablePaymentTracking?: boolean;
 }
 ```
 

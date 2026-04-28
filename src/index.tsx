@@ -98,6 +98,47 @@ type EventProps = {
   query: string;
 };
 
+export type TikTokInitializeOptions = {
+  /** Whether to enable debug mode */
+  debug?: boolean;
+  /** Disable all automatic TikTok SDK events */
+  disableAutomaticTracking?: boolean;
+  /** Disable automatic install event tracking */
+  disableInstallTracking?: boolean;
+  /** Disable automatic app launch event tracking */
+  disableLaunchTracking?: boolean;
+  /** Disable automatic retention event tracking */
+  disableRetentionTracking?: boolean;
+  /** Disable automatic payment event tracking */
+  disablePaymentTracking?: boolean;
+};
+
+type NormalizedTikTokInitializeOptions = Required<TikTokInitializeOptions>;
+
+function normalizeInitializeOptions(
+  options?: boolean | TikTokInitializeOptions
+): NormalizedTikTokInitializeOptions {
+  if (typeof options === 'boolean') {
+    return {
+      debug: options,
+      disableAutomaticTracking: false,
+      disableInstallTracking: false,
+      disableLaunchTracking: false,
+      disableRetentionTracking: false,
+      disablePaymentTracking: false,
+    };
+  }
+
+  return {
+    debug: options?.debug ?? false,
+    disableAutomaticTracking: options?.disableAutomaticTracking ?? false,
+    disableInstallTracking: options?.disableInstallTracking ?? false,
+    disableLaunchTracking: options?.disableLaunchTracking ?? false,
+    disableRetentionTracking: options?.disableRetentionTracking ?? false,
+    disablePaymentTracking: options?.disablePaymentTracking ?? false,
+  };
+}
+
 /**
  * Validates and normalizes TikTok App ID(s) to comma-separated string format.
  * @param ttAppId - Single TikTok App ID or array of App IDs
@@ -175,21 +216,22 @@ function validateAndNormalizeTikTokAppId(ttAppId: string | string[]): string {
  * @param appId - Your app ID: Android package name or iOS listing ID, eg: com.sample.app (from Play Store) or 9876543 (from App Store)
  * @param ttAppId - Your TikTok App ID (string) or App IDs (array). Array format: ['11', '22', '33']. Comma-separated string format: '11,22,33'
  * @param accessToken - Your access token from TikTok Events Manager
- * @param debug - Whether to enable debug mode
+ * @param options - Whether to enable debug mode, or initialization options
  * @returns A promise that resolves when the SDK is initialized.
  */
 export const initializeSdk = async (
   appId: string,
   ttAppId: string | string[],
   accessToken: string,
-  debug?: Boolean
+  options?: boolean | TikTokInitializeOptions
 ): Promise<string> => {
   const normalizedTtAppId = validateAndNormalizeTikTokAppId(ttAppId);
+  const normalizedOptions = normalizeInitializeOptions(options);
   return await TikTokBusinessModule.initializeSdk(
     appId,
     normalizedTtAppId,
     accessToken,
-    debug || false
+    normalizedOptions
   );
 };
 

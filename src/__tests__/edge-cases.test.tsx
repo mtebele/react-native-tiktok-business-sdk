@@ -17,6 +17,15 @@ const mockTikTokBusinessModule =
     typeof NativeModules.TikTokBusinessModule
   >;
 
+const defaultInitOptions = {
+  debug: false,
+  disableAutomaticTracking: false,
+  disableInstallTracking: false,
+  disableLaunchTracking: false,
+  disableRetentionTracking: false,
+  disablePaymentTracking: false,
+};
+
 describe('Edge Cases and Error Handling', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -51,7 +60,7 @@ describe('Edge Cases and Error Handling', () => {
         longAppId,
         longTtAppId,
         accessToken,
-        false
+        defaultInitOptions
       );
     });
   });

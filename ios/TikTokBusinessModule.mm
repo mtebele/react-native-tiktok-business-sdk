@@ -39,7 +39,7 @@ RCT_EXTERN_METHOD(trackAdRevenueEvent:(NSDictionary *)adRevenueJson
 RCT_EXTERN_METHOD(initializeSdk:(NSString *)appId
                   ttAppId:(NSString *)ttAppId
                   accessToken:(NSString *)accessToken
-                  debug:(nonnull NSNumber *)debug
+                  options:(NSDictionary *)options
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
