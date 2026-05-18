@@ -29,6 +29,42 @@ npm install react-native-tiktok-business-sdk
 yarn add react-native-tiktok-business-sdk
 ```
 
+### Expo / Continuous Native Generation
+
+If your app uses Expo (managed or with Continuous Native Generation), add the bundled config plugin to `app.json` / `app.config.ts` to automate the required native edits at prebuild time:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-tiktok-business-sdk",
+        {
+          "ios": {
+            "tiktokAppId": "YOUR_IOS_TIKTOK_APP_ID",
+            "skAdNetworkIds": ["abc1234567.skadnetwork"],
+            "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+          },
+          "android": {
+            "tiktokAppId": "YOUR_ANDROID_TIKTOK_APP_ID"
+          }
+        }
+      ]
+    ]
+  }
+}
+```
+
+The plugin automatically:
+
+- Appends `22mmun2rn5.skadnetwork` (TikTok's SKAdNetwork identifier) to `SKAdNetworkItems` in `Info.plist`
+- Appends `tiktok`, `snssdk1233` and `snssdk1180` to `LSApplicationQueriesSchemes` in `Info.plist`
+- Writes the `TikTokAppID` key in `Info.plist` when `ios.tiktokAppId` is provided
+- Writes `NSUserTrackingUsageDescription` when `ios.userTrackingPermission` is provided — omit it if `expo-tracking-transparency` already manages it for your app
+- Adds the `com.tiktok.sdk.AppId` `<meta-data>` entry to `AndroidManifest.xml` when `android.tiktokAppId` is provided
+
+All mods are idempotent: running `expo prebuild` multiple times will not duplicate entries. After updating the configuration, regenerate the native projects with `npx expo prebuild --clean`.
+
 ### iOS Setup
 
 1. Run pod install in your `ios` directory:

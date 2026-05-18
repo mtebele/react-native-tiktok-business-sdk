@@ -23,6 +23,9 @@
     "android",
     "ios",
     "cpp",
+    "app.plugin.js",
+    "plugin/build",
+    "plugin/src",
     "*.podspec",
     "react-native.config.js",
     "!ios/build",
@@ -38,10 +41,11 @@
   ],
   "scripts": {
     "test": "jest",
-    "typecheck": "tsc",
+    "typecheck": "tsc && tsc --noEmit -p plugin/tsconfig.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib plugin/build",
+    "build:plugin": "tsc -p plugin/tsconfig.json",
+    "prepare": "bob build && yarn build:plugin",
     "release": "dotenv release-it --"
   },
   "keywords": [
@@ -69,6 +73,7 @@
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
     "@evilmartians/lefthook": "^1.5.0",
+    "@expo/config-plugins": "^9.0.0",
     "@react-native/eslint-config": "^0.73.1",
     "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.5",
@@ -92,8 +97,14 @@
     "conventional-changelog-conventionalcommits": "9.0.0"
   },
   "peerDependencies": {
+    "expo": ">=50.0.0",
     "react": "*",
     "react-native": "*"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
   },
   "workspaces": [
     "example"
@@ -110,8 +121,11 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
+      "plugin/src/**/*.ts",
       "!src/**/*.d.ts",
-      "!src/__tests__/**"
+      "!plugin/src/**/*.d.ts",
+      "!src/__tests__/**",
+      "!plugin/src/__tests__/**"
     ],
     "coverageReporters": [
       "text",
@@ -119,7 +133,8 @@
       "html"
     ],
     "testMatch": [
-      "<rootDir>/src/__tests__/**/*.test.{ts,tsx}"
+      "<rootDir>/src/__tests__/**/*.test.{ts,tsx}",
+      "<rootDir>/plugin/src/__tests__/**/*.test.ts"
     ]
   },
   "commitlint": {
