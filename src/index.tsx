@@ -176,6 +176,7 @@ export interface TikTokSdkConfig {
   disableLaunchTracking?: boolean;
   disableRetentionTracking?: boolean;
   disablePaymentTracking?: boolean;
+  disableSKAdNetworkSupport?: boolean;
 }
 
 /**

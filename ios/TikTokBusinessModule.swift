@@ -263,6 +263,9 @@ class TikTokBusinessModule: NSObject, RCTBridgeModule {
       if opts["disablePaymentTracking"] as? Bool == true {
         config?.disablePaymentTracking()
       }
+      if opts["disableSKAdNetworkSupport"] as? Bool == true {
+        config?.disableSKAdNetworkSupport()
+      }
     }
 
     TikTokBusiness.initializeSdk(config) { success, error in

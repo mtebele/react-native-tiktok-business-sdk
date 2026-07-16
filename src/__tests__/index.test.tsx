@@ -106,6 +106,25 @@ describe('TikTokBusiness', () => {
       );
     });
 
+    it('should pass disableSKAdNetworkSupport option to native module', async () => {
+      const appId = 'test-app-id';
+      const ttAppId = '123456';
+      const accessToken = 'test-token';
+      const options = { disableSKAdNetworkSupport: true };
+
+      mockTikTokBusinessModule.initializeSdk.mockResolvedValue('success');
+
+      await initializeSdk(appId, ttAppId, accessToken, undefined, options);
+
+      expect(mockTikTokBusinessModule.initializeSdk).toHaveBeenCalledWith(
+        appId,
+        ttAppId,
+        accessToken,
+        false,
+        options
+      );
+    });
+
     it('should default options to empty object when not provided', async () => {
       mockTikTokBusinessModule.initializeSdk.mockResolvedValue('success');
 

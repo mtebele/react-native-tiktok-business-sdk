@@ -152,6 +152,7 @@ const options: TikTokSdkConfig = {
   disableLaunchTracking: true,      // Don't report app launch event
   disableRetentionTracking: true,   // Don't report 2D-retention event
   disablePaymentTracking: true,     // Don't report automatic IAP event
+  disableSKAdNetworkSupport: true,  // iOS only: don't update SKAdNetwork conversion values
 };
 
 await TikTokBusiness.initializeSdk(
