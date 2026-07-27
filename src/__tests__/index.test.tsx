@@ -72,6 +72,7 @@ describe('TikTokBusiness', () => {
       const options = {
         disableInstallTracking: true,
         disablePaymentTracking: true,
+        disableSKAdNetworkSupport: true,
       };
 
       mockTikTokBusinessModule.initializeSdk.mockResolvedValue('success');

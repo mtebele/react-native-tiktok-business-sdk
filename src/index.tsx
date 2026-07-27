@@ -176,6 +176,12 @@ export interface TikTokSdkConfig {
   disableLaunchTracking?: boolean;
   disableRetentionTracking?: boolean;
   disablePaymentTracking?: boolean;
+  /**
+   * iOS only. Disables the SDK's automatic SKAdNetwork support (registering
+   * the app for ad attribution and updating conversion values). Has no
+   * effect on Android.
+   */
+  disableSKAdNetworkSupport?: boolean;
 }
 
 /**
