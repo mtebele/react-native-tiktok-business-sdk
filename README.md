@@ -445,6 +445,7 @@ If you're using ProGuard for code obfuscation, add these rules to your `proguard
 ```java
 -keep class com.tiktok.** { *; }
 -keep class com.android.billingclient.api.** { *; }
+-keep interface com.android.billingclient.api.* { *; }
 -keep class androidx.lifecycle.** { *; }
 -keep class com.android.installreferrer.** { *; }
 ```
