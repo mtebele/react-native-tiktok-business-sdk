@@ -148,10 +148,11 @@ await TikTokBusiness.initializeSdk(
 
 // Or disable specific events
 const options: TikTokSdkConfig = {
-  disableInstallTracking: true,     // Don't report install event
-  disableLaunchTracking: true,      // Don't report app launch event
-  disableRetentionTracking: true,   // Don't report 2D-retention event
-  disablePaymentTracking: true,     // Don't report automatic IAP event
+  disableInstallTracking: true,       // Don't report install event
+  disableLaunchTracking: true,        // Don't report app launch event
+  disableRetentionTracking: true,     // Don't report 2D-retention event
+  disablePaymentTracking: true,       // Don't report automatic IAP event
+  disableSKAdNetworkSupport: true,    // iOS only: disable automatic SKAdNetwork support
 };
 
 await TikTokBusiness.initializeSdk(
@@ -445,6 +446,7 @@ If you're using ProGuard for code obfuscation, add these rules to your `proguard
 ```java
 -keep class com.tiktok.** { *; }
 -keep class com.android.billingclient.api.** { *; }
+-keep interface com.android.billingclient.api.* { *; }
 -keep class androidx.lifecycle.** { *; }
 -keep class com.android.installreferrer.** { *; }
 ```

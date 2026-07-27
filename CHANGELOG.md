@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-07-27
+
+### 🚀 Major Updates
+
+- **Updated to TikTok Business SDK v1.7.1 (iOS) / v1.7.0 (Android)**
+
+### ✨ Features
+
+- **Added `disableSKAdNetworkSupport` option to `TikTokSdkConfig`** (iOS only): disables the SDK's automatic SKAdNetwork support, i.e. registering the app for ad attribution and updating conversion values. Has no effect on Android. Fully backward-compatible — existing calls without the option are unaffected.
+
+### 📱 Platform Updates
+
+- **Android**: bumped `com.android.billingclient:billing` from `7.1.1` to `8.0.0`
+- **Android**: added `-keep interface com.android.billingclient.api.* { *; }` ProGuard rule (root and example app) required by the updated billing client
+
+### 📚 Documentation
+
+- **Updated README** with the `disableSKAdNetworkSupport` usage example and the additional ProGuard rule
+
 ## [1.6.2] - 2026-05-18
 
 ### 🐛 Bug Fixes
